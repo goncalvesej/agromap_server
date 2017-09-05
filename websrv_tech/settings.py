@@ -11,8 +11,6 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 import os
 import dj_database_url
-import rest_framework
-
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -40,8 +38,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'agromap_api',
+    'agromap',
     'rest_framework',
-    'tech',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -63,7 +62,7 @@ ROOT_URLCONF = 'websrv_tech.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(PROJECT_ROOT, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'debug': True,
@@ -85,9 +84,22 @@ WSGI_APPLICATION = 'websrv_tech.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'agromap',
+        'USER': 'jrfx',
+        'PASSWORD': 'amoracha',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    },
+    'production': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'da9lqlq9ja8d9u',
+        'USER': 'wfhlpuplpdigbr',
+        'PASSWORD': 'e40587d10cc5b4a027194d243eb7c10f777274c3b3e046fb7ee1585069cf456a',
+        'HOST': 'ec2-54-163-237-25.compute-1.amazonaws.com',
+        'PORT': '5432',
+    },
+
 }
 
 # Password validation
@@ -107,6 +119,15 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+    'django.contrib.auth.hashers.BCryptPasswordHasher',
+]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -143,3 +164,13 @@ STATICFILES_DIRS = (
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    )
+}
