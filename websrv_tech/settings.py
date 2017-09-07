@@ -83,15 +83,15 @@ WSGI_APPLICATION = 'websrv_tech.wsgi.application'
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'agromap',
+    #     'USER': 'jrfx',
+    #     'PASSWORD': 'amoracha',
+    #     'HOST': 'localhost',
+    #     'PORT': '5432',
+    # },
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'agromap',
-        'USER': 'jrfx',
-        'PASSWORD': 'amoracha',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    },
-    'production': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'da9lqlq9ja8d9u',
         'USER': 'wfhlpuplpdigbr',
