@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from argon2 import PasswordHasher
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(models.Model):
     id = models.AutoField(primary_key=True, verbose_name='ID')
     name = models.CharField(max_length=20, verbose_name='Nome')
     last_name = models.CharField(max_length=60, verbose_name='Sobrenome')
