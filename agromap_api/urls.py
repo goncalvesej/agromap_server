@@ -5,10 +5,7 @@ from agromap_api import views
 
 urlpatterns = [
 
-    url(r'^signup$', views.signup, name='signup'),
-    url(r'^signin$', views.signin, name='signin'),
-    url(r'^update$', views.update, name='update'),
-    url(r'^update-email$', views.update_email, name='update_email'),
-    url(r'^update-password$', views.update_password, name='update_password'),
+    url(r'^user/', include('agromap_api.user_urls')),
+    url(r'^inspection/', include('agromap_api.inspection_urls')),
     url(r'', views.index, name='index'),
 ]
