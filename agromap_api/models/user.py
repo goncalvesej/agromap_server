@@ -47,9 +47,9 @@ class User(models.Model):
 
     # Atualiza nome e sobrenome
     def update(user):
-        email = user.email
+        __email = user['email']
         password = user['password']
-        users = User.objects.filter(email=email)
+        users = User.objects.filter(email=__email)
         ph = PasswordHasher()
         for u in users:
             u.name = user['name']

@@ -2,6 +2,8 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from argon2 import PasswordHasher
 from agromap_api.models.user import User
+from agromap_api.models.inspection import Inspection
+from agromap_api.models.event import Event
 
 
 class UserSerializer(ModelSerializer):
@@ -30,3 +32,13 @@ class UserSerializer(ModelSerializer):
     #         if ph.verify(user.password, password):
     #             return True
     #     return False
+
+class InspectionSerializer(ModelSerializer):
+    class Meta:
+        model = Inspection
+        fields = ('id', 'name', 'created_at', 'start_at', 'end_at','supervisor','members')
+
+class EventSerializer(ModelSerializer):
+    class Meta:
+        model = Event
+        fields = ('id', 'user', 'inspection', 'typeof', 'description','latitude', 'longitude')

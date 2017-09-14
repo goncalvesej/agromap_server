@@ -4,15 +4,15 @@ from agromap_api.models.inspection import Inspection
 
 class Event(models.Model):
     id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(
-        Inspection,
+    user = models.ForeignKey(
+        User,
         on_delete = models.SET_DEFAULT,
         blank=False,
         null=False,
         default = 0
     )
-    inspection_id = models.ForeignKey(
-        User,
+    inspection = models.ForeignKey(
+        Inspection,
         on_delete = models.CASCADE,
         blank=False,
         null=False,
@@ -27,3 +27,41 @@ class Event(models.Model):
     def __str__(self):
         # return '%s' % self.title
         return self.id
+
+    def get_by_id_json(__id):
+        __events = Event.objects.filter(id=__id)
+        if(len(__events) == 1):
+            for ev in __events:
+                pass
+            __event = {
+                'id':ev.id,
+                'user':ev.user.id,
+                'inspection':ev.inspection.id,
+                'typeof':ev.typeof,
+                'description':ev.description,
+                'created_at':str(ev.created_at),
+                'last_edit_at':str(ev.last_edit_at),
+                'latitude':ev.latitude,
+                'longitude':ev.longitude,
+            }
+            return __event
+        return None
+
+    def get_by_id_obj(__id):
+        __events = Event.objects.filter(id=__id)
+        if(len(__events) == 1):
+            for ev in __events:
+                return ev
+        return None
+
+    def get_by_user(__id):
+        __events = Event.objects.filter(user=__id)
+        if(len(__events) > 0):
+            return __events
+        return None
+
+    def get_by_inspection(__id):
+        __events = Event.objects.filter(inspection=__id)
+        if(len(__events) > 0):
+            return __events
+        return None

@@ -66,7 +66,8 @@ def update(request):
             if User.update(__data):
                 return JsonResponse(True, status=200, safe=False)
             else:
-                return JsonResponse({"Error":"Email not found"}, status=400)
+                return JsonResponse({"Error":"Email not found"}, status=400, safe=False)
+        return JsonResponse({"Error":"Incorrect password"}, status=400)
     else:
         return JsonResponse({"Error":"HTTP method not allowed"}, status=405, safe=False)
 
