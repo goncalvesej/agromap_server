@@ -87,6 +87,21 @@ def get_by_id(request, id=None):
 # TODO
 # Header Authorization
 @csrf_exempt
+def get_all(request, id=None):
+    if request.method == 'GET':
+        try:
+            __inspections = Inspection.get_all()
+            if(__inspections != None):
+                data = serializers.serialize('json', __inspections)
+                return JsonResponse(data, status=200, safe=False)
+            return JsonResponse({"Error":"None inspections found"}, status=400, safe=False)
+        except Exception as e:
+            return JsonResponse({"Error":"Agromap: Bad request"}, status=400, safe=False)
+    return JsonResponse({"Error":"Agromap: HTTP method not allowed"}, status=405, safe=False)
+
+# TODO
+# Header Authorization
+@csrf_exempt
 def get_by_supervisor(request, id=None):
     if request.method == 'GET':
         try:

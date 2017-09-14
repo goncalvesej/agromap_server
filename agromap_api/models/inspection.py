@@ -21,6 +21,13 @@ class Inspection(models.Model):
         # return '%s' % self.title
         return self.name
 
+
+    def get_all():
+        __inspections = Inspection.objects.all()
+        if(len(__inspections) > 0):
+            return __inspections
+        return None
+
     def get_by_id_json(__id):
         __inspections = Inspection.objects.filter(id=__id)
         if(len(__inspections) == 1):
