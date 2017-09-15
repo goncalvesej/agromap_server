@@ -177,9 +177,8 @@ def get_event_by_id(request, id=None):
 def get_event_by_inspection(request, id=None):
     if request.method == 'GET':
         try:
-            __events = Event.get_by_inspection(id)
-            if(__events != None):
-                data = serializers.serialize('json', __events)
+            data = Event.get_by_inspection(id)
+            if(data != None):
                 return JsonResponse(data, status=200, safe=False)
             return JsonResponse({"Error":"None event from inspection"}, status=400, safe=False)
         except Exception as e:

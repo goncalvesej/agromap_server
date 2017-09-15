@@ -55,13 +55,27 @@ class Event(models.Model):
         return None
 
     def get_by_user(__id):
-        __events = Event.objects.filter(user=__id)
+        __events = Event.objects.filter(user=__id).order_by('id')
         if(len(__events) > 0):
             return __events
         return None
 
     def get_by_inspection(__id):
-        __events = Event.objects.filter(inspection=__id)
+        __events = Event.objects.filter(inspection=__id).order_by('id')
+        data = []
         if(len(__events) > 0):
-            return __events
+            for ev in __events:
+                __event = {
+                    'id':ev.id,
+                    'user':ev.user.id,
+                    'inspection':ev.inspection.id,
+                    'typeof':ev.typeof,
+                    'description':ev.description,
+                    'created_at':str(ev.created_at),
+                    'last_edit_at':str(ev.last_edit_at),
+                    'latitude':ev.latitude,
+                    'longitude':ev.longitude,
+                }
+                data.append(__event)
+            return data
         return None

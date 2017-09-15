@@ -23,7 +23,7 @@ class Inspection(models.Model):
 
 
     def get_all():
-        __inspections = Inspection.objects.all()
+        __inspections = Inspection.objects.all().order_by('id')
         if(len(__inspections) > 0):
             array = []
             for i in __inspections:
@@ -64,7 +64,7 @@ class Inspection(models.Model):
 
 
     def get_by_supervisor(supervisor_id):
-        __inspections = Inspection.objects.filter(supervisor=supervisor_id)
+        __inspections = Inspection.objects.filter(supervisor=supervisor_id).order_by('id')
         if(len(__inspections) > 0):
             array = []
             for i in __inspections:
