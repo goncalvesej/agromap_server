@@ -25,7 +25,18 @@ class Inspection(models.Model):
     def get_all():
         __inspections = Inspection.objects.all()
         if(len(__inspections) > 0):
-            return __inspections
+            array = []
+            for i in __inspections:
+                __inspection = {
+                    'id':i.id,
+                    'name':i.name,
+                    'created_at':str(i.created_at),
+                    'start_at':str(i.start_at),
+                    'end_at':str(i.end_at),
+                    'supervisor':i.supervisor.id,
+                }
+                array.append(__inspection)
+            return array
         return None
 
     def get_by_id_json(__id):
@@ -55,5 +66,16 @@ class Inspection(models.Model):
     def get_by_supervisor(supervisor_id):
         __inspections = Inspection.objects.filter(supervisor=supervisor_id)
         if(len(__inspections) > 0):
-            return __inspections
+            array = []
+            for i in __inspections:
+                __inspection = {
+                    'id':i.id,
+                    'name':i.name,
+                    'created_at':str(i.created_at),
+                    'start_at':str(i.start_at),
+                    'end_at':str(i.end_at),
+                    'supervisor':i.supervisor.id,
+                }
+                array.append(__inspection)
+            return array
         return False

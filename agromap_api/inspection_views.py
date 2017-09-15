@@ -90,14 +90,14 @@ def get_by_id(request, id=None):
 def get_all(request, id=None):
     if request.method == 'GET':
         try:
-            __inspections = Inspection.get_all()
-            if(__inspections != None):
-                data = serializers.serialize('json', __inspections)
+            data = Inspection.get_all()
+            if(data != None):
                 return JsonResponse(data, status=200, safe=False)
             return JsonResponse({"Error":"None inspections found"}, status=400, safe=False)
         except Exception as e:
+            print(e)
             return JsonResponse({"Error":"Agromap: Bad request"}, status=400, safe=False)
-    return JsonResponse({"Error":"Agromap: HTTP method not allowed"}, status=405, safe=False)
+    return JsonResponse({"Error":"Agromap: HTTP method not allow    ed"}, status=405, safe=False)
 
 # TODO
 # Header Authorization
@@ -105,11 +105,10 @@ def get_all(request, id=None):
 def get_by_supervisor(request, id=None):
     if request.method == 'GET':
         try:
-            __inspections = Inspection.get_by_supervisor(id)
-            if(__inspections != None):
-                data = serializers.serialize('json', __inspections)
+            data = Inspection.get_by_supervisor(id)
+            if(data != None):
                 return JsonResponse(data, status=200, safe=False)
-            return JsonResponse({"Error":"Inspection not found"}, status=400, safe=False)
+            return JsonResponse({"Error":"None inspection from supervisor"}, status=400, safe=False)
         except Exception as e:
             return JsonResponse({"Error":"Agromap: Bad request"}, status=400, safe=False)
     return JsonResponse({"Error":"Agromap: HTTP method not allowed"}, status=405, safe=False)
