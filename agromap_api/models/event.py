@@ -17,7 +17,7 @@ class Event(models.Model):
         blank=False,
         null=False,
     )
-    typeof = models.IntegerField()
+    types = models.IntegerField()
     description = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     last_edit_at = models.DateTimeField(auto_now_add=True)
@@ -37,7 +37,7 @@ class Event(models.Model):
                 'id':ev.id,
                 'user':ev.user.id,
                 'inspection':ev.inspection.id,
-                'typeof':ev.typeof,
+                'types':ev.types,
                 'description':ev.description,
                 'created_at':str(ev.created_at),
                 'last_edit_at':str(ev.last_edit_at),
@@ -69,7 +69,7 @@ class Event(models.Model):
                     'id':ev.id,
                     'user':ev.user.id,
                     'inspection':ev.inspection.id,
-                    'typeof':ev.typeof,
+                    'types':ev.types,
                     'description':ev.description,
                     'created_at':str(ev.created_at),
                     'last_edit_at':str(ev.last_edit_at),

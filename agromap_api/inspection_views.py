@@ -113,6 +113,22 @@ def get_by_supervisor(request, id=None):
             return JsonResponse({"Error":"Agromap: Bad request"}, status=400, safe=False)
     return JsonResponse({"Error":"Agromap: HTTP method not allowed"}, status=405, safe=False)
 
+@csrf_exempt
+def create_events(request):
+    if request.method == 'POST':
+        __data = json.loads(request.POST['event'])
+        for __event in __data:
+            print(__data)
+            serializer = EventSerializer(data=__event)
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                print(serializer.errors)
+                return JsonResponse("False", status=400, safe=False)
+        return JsonResponse("True", status=201, safe=False)
+    else:
+        return JsonResponse({"Error":"Agromap: HTTP method not allowed"}, status=405, safe=False)
+
 
 @csrf_exempt
 def create_event(request):
@@ -182,6 +198,7 @@ def get_event_by_inspection(request, id=None):
                 return JsonResponse(data, status=200, safe=False)
             return JsonResponse({"Error":"None event from inspection"}, status=400, safe=False)
         except Exception as e:
+            print(e)
             return JsonResponse({"Error":"Agromap: Bad request"}, status=400, safe=False)
     return JsonResponse({"Error":"Agromap: HTTP method not allowed"}, status=405, safe=False)
 
