@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^get-all$', inspection_views.get_all, name='get-all'),
     url(r'^get-by-id/(\d+)$', inspection_views.get_by_id, name='get-inspection-by-id'),
     url(r'^get-by-supervisor/(\d+)$', inspection_views.get_by_supervisor, name='get-inspection-by-sup'),
+    url(r'^create-events$', inspection_views.create_events, name='create-events'),
     url(r'^create-event$', inspection_views.create_event, name='create-event'),
     url(r'^update-event$', inspection_views.update_event, name='update-event'),
     url(r'^delete-event$', inspection_views.delete_event, name='delete-event'),

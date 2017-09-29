@@ -86,8 +86,8 @@ DATABASES = {
     # 'default': {
     #     'ENGINE': 'django.db.backends.postgresql',
     #     'NAME': 'agromap',
-    #     'USER': 'jrfx',
-    #     'PASSWORD': 'amoracha',
+    #     'USER': 'postgres',
+    #     'PASSWORD': 'postgres',
     #     'HOST': 'localhost',
     #     'PORT': '5432',
     # },
