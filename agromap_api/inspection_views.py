@@ -93,7 +93,7 @@ def get_all(request, id=None):
             data = Inspection.get_all()
             if(data != None):
                 return JsonResponse(data, status=200, safe=False)
-            return JsonResponse({"Error":"None inspections found"}, status=400, safe=False)
+            return JsonResponse(True, status=200, safe=False)
         except Exception as e:
             print(e)
             return JsonResponse({"Error":"Agromap: Bad request"}, status=400, safe=False)
