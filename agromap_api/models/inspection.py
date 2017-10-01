@@ -15,7 +15,6 @@ class Inspection(models.Model):
         null=False,
         default = 0
     )
-    members = models.ManyToManyField(User)
 
     def __str__(self):
         # return '%s' % self.title

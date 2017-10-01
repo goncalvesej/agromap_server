@@ -47,6 +47,7 @@ def update(request):
             if serializer.is_valid():
                 serializer.save()
                 return JsonResponse(True, status=201, safe=False)
+            print(serializer.errors)
             return JsonResponse(serializer.errors, status=400, safe=False)
         except Exception as e:
             print(e)
@@ -62,7 +63,7 @@ def update(request):
 def delete(request):
     if request.method == 'POST':
         __data = json.loads(request.POST['inspection'])
-        __inspection = Inspection.get_by_id(__data['id'])
+        __inspection = Inspection.get_by_id_obj(__data['id'])
         if(__inspection != None):
             __inspection.delete()
             return JsonResponse(True, status=200, safe=False)
