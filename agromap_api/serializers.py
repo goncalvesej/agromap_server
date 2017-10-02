@@ -25,18 +25,10 @@ class UserSerializer(ModelSerializer):
         ph = PasswordHasher()
         return ph.hash(pwd)
 
-    # def signin(self, validated_data):
-    #     users = User.objects.filter(email=validated_data.email)
-    #     ph = PasswordHasher()
-    #     for u in users:
-    #         if ph.verify(user.password, password):
-    #             return True
-    #     return False
-
 class InspectionSerializer(ModelSerializer):
     class Meta:
         model = Inspection
-        fields = ('id', 'name', 'created_at', 'start_at', 'end_at','supervisor','members')
+        fields = ('id', 'name', 'created_at', 'start_at', 'end_at','supervisor')
 
 class EventSerializer(ModelSerializer):
     class Meta:

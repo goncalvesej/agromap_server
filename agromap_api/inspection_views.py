@@ -47,6 +47,7 @@ def update(request):
             if serializer.is_valid():
                 serializer.save()
                 return JsonResponse(True, status=201, safe=False)
+            print(serializer.errors)
             return JsonResponse(serializer.errors, status=400, safe=False)
         except Exception as e:
             print(e)
@@ -62,7 +63,7 @@ def update(request):
 def delete(request):
     if request.method == 'POST':
         __data = json.loads(request.POST['inspection'])
-        __inspection = Inspection.get_by_id(__data['id'])
+        __inspection = Inspection.get_by_id_obj(__data['id'])
         if(__inspection != None):
             __inspection.delete()
             return JsonResponse(True, status=200, safe=False)
@@ -118,13 +119,22 @@ def create_events(request):
     if request.method == 'POST':
         __data = json.loads(request.POST['event'])
         for __event in __data:
-            print(__data)
-            serializer = EventSerializer(data=__event)
-            if serializer.is_valid():
-                serializer.save()
+            print(__event['latitude'])
+            if(__event['id'] > 0 and __event['latitude'] == 'delete'):
+                event_to_delete = Event.get_by_id_obj(__event['id'])
+                event_to_delete.delete()
+                print("Excluido")
             else:
-                print(serializer.errors)
-                return JsonResponse("False", status=400, safe=False)
+                __event_obj = Event.get_by_id_obj(__event['id'])
+                if(__event_obj != None):
+                    serializer = EventSerializer(__event_obj, data=__event)
+                else:
+                    serializer = EventSerializer(data=__event)
+                if serializer.is_valid():
+                    serializer.save()
+                else:
+                    print(serializer.errors)
+                    return JsonResponse("False", status=400, safe=False)
         return JsonResponse("True", status=201, safe=False)
     else:
         return JsonResponse({"Error":"Agromap: HTTP method not allowed"}, status=405, safe=False)
