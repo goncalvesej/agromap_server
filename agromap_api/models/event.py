@@ -19,7 +19,6 @@ class Event(models.Model):
     )
     types = models.IntegerField()
     description = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
     last_edit_at = models.DateTimeField(auto_now_add=True)
     latitude = models.CharField(max_length=255)
     longitude = models.CharField(max_length=255)
@@ -39,7 +38,6 @@ class Event(models.Model):
                 'inspection':ev.inspection.id,
                 'types':ev.types,
                 'description':ev.description,
-                'created_at':str(ev.created_at),
                 'last_edit_at':str(ev.last_edit_at),
                 'latitude':ev.latitude,
                 'longitude':ev.longitude,
@@ -71,7 +69,6 @@ class Event(models.Model):
                     'inspection':ev.inspection.id,
                     'types':ev.types,
                     'description':ev.description,
-                    'created_at':str(ev.created_at),
                     'last_edit_at':str(ev.last_edit_at),
                     'latitude':ev.latitude,
                     'longitude':ev.longitude,

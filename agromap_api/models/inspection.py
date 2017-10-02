@@ -4,7 +4,7 @@ import numpy
 
 class Inspection(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=20,null=False)
+    name = models.CharField(max_length=40,null=False)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
     start_at = models.DateTimeField(null=False)
     end_at = models.DateTimeField(null=False)
