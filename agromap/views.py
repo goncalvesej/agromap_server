@@ -113,6 +113,14 @@ def signup(request):
         'form_login': form_login,
         'user':__logged_user
         })
+def delete_all(request):
+    Event.delete_all
+    Inspection.delete_all
+    return render(request, 'index.html',
+    {
+        'form_login': form_login,
+        'user':__logged_user
+    })
 
 # View para logout
 def logout(request):

@@ -33,4 +33,4 @@ class InspectionSerializer(ModelSerializer):
 class EventSerializer(ModelSerializer):
     class Meta:
         model = Event
-        fields = ('id', 'user', 'inspection', 'types', 'description','latitude', 'longitude')
+        fields = ('id', 'user', 'inspection', 'description', 'kind', 'latitude', 'longitude')

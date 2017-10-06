@@ -51,6 +51,7 @@ def signup(request):
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(True, status=201, safe=False)
+        print(serializer.errors)
         return JsonResponse(serializer.errors, status=400, safe=False)
     else:
         return JsonResponse({"Error":"HTTP method not allowed"}, status=405, safe=False)

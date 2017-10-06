@@ -3,7 +3,7 @@ from agromap_api.models.user import User
 from agromap_api.models.inspection import Inspection
 
 class Event(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.CharField(max_length=255)
     user = models.ForeignKey(
         User,
         on_delete = models.SET_DEFAULT,
@@ -17,8 +17,8 @@ class Event(models.Model):
         blank=False,
         null=False,
     )
-    types = models.IntegerField()
     description = models.CharField(max_length=255)
+    kind = models.CharField(max_length=40, default='Checked')
     last_edit_at = models.DateTimeField(auto_now_add=True)
     latitude = models.CharField(max_length=255)
     longitude = models.CharField(max_length=255)
@@ -36,8 +36,8 @@ class Event(models.Model):
                 'id':ev.id,
                 'user':ev.user.id,
                 'inspection':ev.inspection.id,
-                'types':ev.types,
                 'description':ev.description,
+                'kind':ev.kind,
                 'last_edit_at':str(ev.last_edit_at),
                 'latitude':ev.latitude,
                 'longitude':ev.longitude,
@@ -67,8 +67,8 @@ class Event(models.Model):
                     'id':ev.id,
                     'user':ev.user.id,
                     'inspection':ev.inspection.id,
-                    'types':ev.types,
                     'description':ev.description,
+                    'kind':ev.kind,
                     'last_edit_at':str(ev.last_edit_at),
                     'latitude':ev.latitude,
                     'longitude':ev.longitude,
