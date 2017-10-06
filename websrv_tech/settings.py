@@ -83,22 +83,22 @@ WSGI_APPLICATION = 'websrv_tech.wsgi.application'
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'agromap',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    },
     # 'default': {
     #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'da9lqlq9ja8d9u',
-    #     'USER': 'wfhlpuplpdigbr',
-    #     'PASSWORD': 'e40587d10cc5b4a027194d243eb7c10f777274c3b3e046fb7ee1585069cf456a',
-    #     'HOST': 'ec2-54-163-237-25.compute-1.amazonaws.com',
+    #     'NAME': 'agromap',
+    #     'USER': 'postgres',
+    #     'PASSWORD': 'postgres',
+    #     'HOST': 'localhost',
     #     'PORT': '5432',
     # },
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'da9lqlq9ja8d9u',
+        'USER': 'wfhlpuplpdigbr',
+        'PASSWORD': 'e40587d10cc5b4a027194d243eb7c10f777274c3b3e046fb7ee1585069cf456a',
+        'HOST': 'ec2-54-163-237-25.compute-1.amazonaws.com',
+        'PORT': '5432',
+    },
 
 }
 
