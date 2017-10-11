@@ -3,7 +3,7 @@ from agromap_api.models.user import User
 from agromap_api.models.inspection import Inspection
 
 class Event(models.Model):
-    id = models.CharField(max_length=255)
+    uuid = models.CharField(max_length=255)
     user = models.ForeignKey(
         User,
         on_delete = models.SET_DEFAULT,
@@ -24,7 +24,6 @@ class Event(models.Model):
     longitude = models.CharField(max_length=255)
 
     def __str__(self):
-        # return '%s' % self.title
         return self.id
 
     def get_by_id_json(__id):
