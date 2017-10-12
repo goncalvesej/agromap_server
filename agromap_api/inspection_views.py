@@ -9,12 +9,13 @@ from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
 import json
 import numpy
+import datetime
 
 from agromap_api.models.inspection import Inspection
 from agromap_api.models.event import Event
+from agromap_api.models.device import Device
 from agromap_api.serializers import InspectionSerializer
 from agromap_api.serializers import EventSerializer
-
 
 # View para index
 @csrf_exempt
@@ -51,7 +52,6 @@ def update(request):
             print(serializer.errors)
             return JsonResponse(serializer.errors, status=400, safe=False)
         except Exception as e:
-            print(e)
             return JsonResponse({"Error":"Agromap: Bad request"}, status=400, safe=False)
     else:
         return JsonResponse({"Error":"Agromap: HTTP method not allowed"}, status=405, safe=False)
@@ -121,10 +121,13 @@ def create_events(request):
         __data = json.loads(request.POST['event'])
         for __event in __data:
             if( __event['latitude'] == 'delete'):
-                event_to_delete = Event.get_by_id_obj(__event['id'])
-                event_to_delete.delete()
+                try:
+                    event_to_delete = Event.get_by_id_obj(__event['uuid'])
+                    event_to_delete.delete()
+                except:
+                    pass
             else:
-                __event_obj = Event.get_by_id_obj(__event['id'])
+                __event_obj = Event.get_by_id_obj(__event['uuid'])
                 if(__event_obj != None):
                     serializer = EventSerializer(__event_obj, data=__event)
                 else:
@@ -156,7 +159,7 @@ def create_event(request):
 def update_event(request):
     if request.method == 'POST':
         __data = json.loads(request.POST['event'])
-        __event = Event.get_by_id_obj(__data['id'])
+        __event = Event.get_by_id_obj(__data['uuid'])
         serializer = EventSerializer(__event, data=__data)
         if serializer.is_valid():
             serializer.save()
@@ -172,7 +175,7 @@ def update_event(request):
 def delete_event(request):
     if request.method == 'POST':
         __data = json.loads(request.POST['event'])
-        __event = Event.get_by_id_obj(__data['id'])
+        __event = Event.get_by_id_obj(__data['uuid'])
         if(__event != None):
             __event.delete()
             return JsonResponse(True, status=200, safe=False)
@@ -184,10 +187,10 @@ def delete_event(request):
 # Header Authorization
 #
 @csrf_exempt
-def get_event_by_id(request, id=None):
+def get_event_by_id(request, uuid=None):
     if request.method == 'GET':
         try:
-            __event = Event.get_by_id_json(id)
+            __event = Event.get_by_id_json(uuid)
             if(__event != None):
                 return JsonResponse(json.dumps(__event), status=200, safe=False)
             return JsonResponse({"Error":"Event not found"}, status=400, safe=False)
@@ -230,6 +233,15 @@ def get_event_by_user(request, id=None):
 @csrf_exempt
 def get_uuid(request):
     try:
-        return JsonResponse({"UUID":"ABCD"}, status=201, safe=False)
-    except Exception as e:
-        print(e)
+        exit = False
+        new_uuid = ''
+        while exit != True:
+            new_uuid = Device.get_new_uuid()
+            if(Device.check(new_uuid)):
+                exit = True
+        device = Device()
+        device.uuid = new_uuid
+        device.save()
+        return JsonResponse({"UUID":new_uuid}, status=201, safe=False)
+    except:
+        pass

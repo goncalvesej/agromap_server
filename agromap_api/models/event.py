@@ -24,15 +24,15 @@ class Event(models.Model):
     longitude = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.id
+        return self.uuid
 
-    def get_by_id_json(__id):
-        __events = Event.objects.filter(id=__id)
+    def get_by_id_json(__uuid):
+        __events = Event.objects.filter(uuid=__uuid)
         if(len(__events) == 1):
             for ev in __events:
                 pass
             __event = {
-                'id':ev.id,
+                'uuid':ev.uuid,
                 'user':ev.user.id,
                 'inspection':ev.inspection.id,
                 'description':ev.description,
@@ -44,15 +44,15 @@ class Event(models.Model):
             return __event
         return None
 
-    def get_by_id_obj(__id):
-        __events = Event.objects.filter(id=__id)
+    def get_by_id_obj(__uuid):
+        __events = Event.objects.filter(uuid=__uuid)
         if(len(__events) == 1):
             for ev in __events:
                 return ev
         return None
 
     def get_by_user(__id):
-        __events = Event.objects.filter(user=__id).order_by('id')
+        __events = Event.objects.filter(user=__id).order_by('uuid')
         if(len(__events) > 0):
             return __events
         return None
@@ -63,7 +63,7 @@ class Event(models.Model):
         if(len(__events) > 0):
             for ev in __events:
                 __event = {
-                    'id':ev.id,
+                    'uuid':ev.uuid,
                     'user':ev.user.id,
                     'inspection':ev.inspection.id,
                     'description':ev.description,
