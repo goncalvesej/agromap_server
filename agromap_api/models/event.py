@@ -17,7 +17,11 @@ class Event(models.Model):
         blank=False,
         null=False,
     )
-    description = models.CharField(max_length=255)
+    description = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True
+    )
     kind = models.CharField(max_length=40, default='Checked')
     last_edit_at = models.DateTimeField(auto_now_add=True)
     latitude = models.CharField(max_length=255)
