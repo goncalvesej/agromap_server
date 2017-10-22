@@ -9,13 +9,12 @@ class User(models.Model):
     last_name = models.CharField(max_length=60, verbose_name='Sobrenome')
     email = models.EmailField(max_length=60, unique=True, verbose_name='Email')
     password = models.CharField(max_length=255, verbose_name='Senha')
-    level = models.IntegerField(default=0, verbose_name='Nível')
+    level = models.IntegerField(default=2, verbose_name='Nível')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
 
     def __str__(self):
         # return '%s' % self.title
         return self.name
-
 
     # Login
     # Tenta efetuar pelo id (esta forma é utilizada para alterar o email)
@@ -87,4 +86,23 @@ class User(models.Model):
         users = User.objects.filter(email=email)
         for u in users:
             return u.id
+        return False
+
+    def get_by_id(__id):
+        users = User.objects.filter(id=__id)
+        if (len(users) < 1):
+            return None
+        for user in users:
+            user.password = "************"
+            return user
+
+    def get_all():
+        return User.objects.all()
+
+    def delete(__id):
+        try:
+            User.objects.filter(id=__id).delete()
+            return True
+        except:
+            pass
         return False

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<div class="row text-center justify-content center">
+  <div class="col-md-12">
+      <h1>{{title}}</h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <a class="btn btn-dark" href="/inspecao/criar">Criar nova</a>
+  </div>
+</div>
+<br>
+<div class="row center-block">
+  <div class="col-md-12">
+
+    <table class="table table-hover">
+      <tr>
+        <th>Nome</th>
+        <th>Criado em</th>
+        <th>Início</th>
+        <th>Fim</th>
+        <th>Ações</th>
+      </tr>
+      {% for i in inspections %}
+      <tr onclick="goToEvents({{i.id}});">
+        <td>{{i.name}}</td>
+        <td>{{i.created_at}}</td>
+        <td>{{i.start_at}}</td>
+        <td>{{i.end_at}}</td>
+        {% if i.supervisor.id == user.id %}
+        <td>
+          <a type="button" href="/inspecao/{{i.id}}/editar" class="btn btn-warning" name="button">Editar</a> |
+          <a type="button" href="/inspecao/{{i.id}}/excluir" class="btn btn-danger" name="button">Excluir</a>
+        </td>
+        {% else %}
+        <td>
+          <button type="button" class="btn btn-warning" disabled href="#" name="button">Editar</button> |
+          <button type="button" class="btn btn-danger"  disabled href="#" name="button">Excluir</button>
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
+{% endblock %}

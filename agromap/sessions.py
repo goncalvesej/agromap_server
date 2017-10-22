@@ -26,11 +26,14 @@ class UserSession():
 
     #Retorna objeto User que está salvo na sessão
     def GetSessionData(request):
-        return User(
-            id=request.session['user']['id'],
-            name=request.session['user']['name'],
-            email=request.session['user']['email'],
-            )
+        if(request.session['user']!=None):
+            return User(
+                id=request.session['user']['id'],
+                name=request.session['user']['name'],
+                email=request.session['user']['email'],
+                level=request.session['user']['level'],
+                )
+        return None
 
     #Destrói a sessão
     def KillSession(request):

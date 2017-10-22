@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-12 col-align-self-center text-center distance">
+      <h1>{{title}}</h1>
+  </div>
+</div>
+<div class="row justify-content-center">
+  <div class="col-md-6">
+
+    <form action="/cadastro" class="form" method="POST" id="form_user">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="name">Nome</label>
+        <input class="form-control" type="text" name="name" value="{{user.name}}">
+      </div>
+      <div class="form-group">
+        <label for="name">Sobrenome</label>
+        <input class="form-control" type="text" name="name" value="{{user.last_name}}">
+      </div>
+      <div class="form-group">
+        <label for="name">Email</label>
+        <input class="form-control" type="text" name="name" value="{{user.email}}">
+      </div>
+      <div class="form-group text-center">
+        <a href="#" data-toggle="modal" data-target="#modalPass" type="submit">Clique aqui para alterar sua senha</a>
+      </div>
+      <br>
+      <p><button type="submit" name="button" class="btn btn-primary btn-block" >Salvar</button></p>
+      <button name="button" href="/" class="btn btn-secondary btn-block" >Cancelar</button>
+    </form>
+
+    <!--Begin Modal Change Password-->
+    <div class="modal fade" id="modalPass" tabindex="-1" role="dialog" aria-labelledby="modalChangePassTitle" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-center">
+            <h3>Alterar senha</h3>
+            <br>
+            <form action="/alterar-senha" id="form_password" class="form-vertical" method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="old_password">Senha atual</label>
+                <input class="form-control" type="password" name="old_password" value="">
+              </div>
+              <div class="form-group">
+                <label for="new_password">Nova senha</label>
+                <input class="form-control" type="password" name="new_password" value="">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" form="form_password" class="btn btn-success">Alterar</button>
+            <button type="button" form="form_password" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--End Modal Change Password-->
+  </div>
+</div>
+
+{% endblock %}

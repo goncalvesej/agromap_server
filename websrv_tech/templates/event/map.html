@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/mapsjs-ui.css' %}">
+<script src="{% static 'js/map.js' %}"></script>
+
+<link rel="stylesheet" type="text/css" href="https://js.cit.api.here.com/v3/3.0/mapsjs-ui.css" />
+<script type="text/javascript" src="https://js.cit.api.here.com/v3/3.0/mapsjs-core.js"></script>
+<script type="text/javascript" src="https://js.cit.api.here.com/v3/3.0/mapsjs-service.js"></script>
+<script type="text/javascript" src="https://js.cit.api.here.com/v3/3.0/mapsjs-ui.js"></script>
+<script type="text/javascript" src="https://js.cit.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
+
+<div class="row justify-content-center">
+  <div class="col-10 text-center">
+    <h4><b>Inspeção:</b> {{inspection}}</h4>
+    <span class="text-success"><img  src="{% static 'img/pins/green.png' %}" style="width: 35px;"> Verificado</span>
+    <span class="text-info"><img  src="{% static 'img/pins/cyan.png' %}" style="width: 35px;"> Observação</span>
+    <span class="text-danger"><img  src="{% static 'img/pins/red.png' %}" style="width: 35px;"> Problema</span>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <input type="text" hidden="hidden" id="inspection_id" value="{{inspection.id}}">
+    <div id="map" style="width: 100%; height: 550px; background: grey" />
+    <script  type="text/javascript" charset="UTF-8" >
+
+      /*
+        Functions
+      */
+
+      // Move mapa para uma posição
+      function moveMapToPosition(latitude, longitude, zoom){
+        map.setCenter({lat:latitude, lng:longitude});
+        map.setZoom(zoom);
+      }
+
+      function retrieveEvents(){
+        var id = document.getElementById('inspection_id').value;
+        var latitude ='';
+        var longitude = '';
+        url = "/retrieve-events/" + id;
+        $.get( url, function( data ) {
+          for(i=0; i< data.length; i++){
+            latitude = data[i].latitude;
+            longitude = data[i].longitude;
+            addMarker(latitude, longitude, data[i].kind);
+          }
+          if(latitude != '')
+            moveMapToPosition(latitude, longitude, 14);
+        });
+      }
+
+      // Função para adicionar marcador
+      function addMarker(latitude, longitude, type){
+        var markerElement = document.createElement('div'),
+            innerElement = document.createElement('div');
+
+       markerElement.style.cursor = 'pointer';
+       markerElement.style.borderRadius = '60px 60px ';
+       markerElement.style.width = '20px ';
+       markerElement.style.height = '20px';
+       if(type == 'Checked'){
+         markerElement.style.backgroundColor = '#0F0';
+       }else if (type == 'Observation'){
+         markerElement.style.backgroundColor = '#00F';
+       }else if (type == 'Problem'){
+         markerElement.style.backgroundColor = '#F00';
+       }else{
+         markerElement.style.backgroundColor = '#000';
+       }
+
+       function changeOpacity(evt) {
+         evt.target.style.opacity = 0.1;
+       };
+
+       function changeOpacityToOne(evt) {
+         evt.target.style.opacity = 1;
+       };
+
+
+       var domIcon = new H.map.DomIcon(markerElement, {
+
+         onAttach: function(clonedElement, domIcon, domMarker) {
+           clonedElement.addEventListener('click', changeOpacity);
+           clonedElement.addEventListener('mouseout', changeOpacityToOne);
+         },
+
+         onDetach: function(clonedElement, domIcon, domMarker) {
+           clonedElement.removeEventListener('click', changeOpacity);
+           clonedElement.removeEventListener('mouseout', changeOpacityToOne);
+         }
+       });
+
+       var eventMarker = new H.map.DomMarker({lat: latitude, lng: longitude}, {
+         icon: domIcon
+       });
+
+       map.addObject(eventMarker);
+
+      }
+      /*
+        End functions
+      */
+
+      /*
+      Map
+      */
+      //Step 1: initialize communication with the platform
+      var platform = new H.service.Platform({
+        app_id: 'TcTmGYal6RVbQ5aMo9xH',
+        app_code: 'e-TOX3l-aSUU0aB2uXU9Ug',
+        useCIT: true,
+        useHTTPS: true
+      });
+
+      var defaultLayers = platform.createDefaultLayers();
+
+      var map = new H.Map(document.getElementById('map'), defaultLayers.normal.map);
+
+      var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+      var ui = H.ui.UI.createDefault(map, defaultLayers);
+      moveMapToPosition(-12.7229533, -47.1325016, 4);
+      /*
+        End Map
+      */
+      retrieveEvents();
+    </script>
+
+  </div>
+</div>
+
+{% endblock %}

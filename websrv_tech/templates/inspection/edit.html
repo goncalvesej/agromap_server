@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<div class="row text-center center-block">
+  <div class="col-md-12">
+      <h1>{{title}}</h1>
+  </div>
+</div>
+
+<div class="row text-center justify-content-center">
+  <div class="col-md-6">
+    <form class="form" action="/inspecao/editar" method="post">
+      {% csrf_token %}
+      <input type="text" hidden="hidden" name="id" value="{{inspection.id}}">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input class="form-control" type="text" name="name" value="{{inspection.name}}">
+      </div>
+      <div class="form-group">
+        <label for="start_at">Início</label>
+        <input name="start_at" onchange="formatDate(this);" value="{{inspection.start_at}}" class="auto-kal form-control" required></input>
+      </div>
+      <div class="form-group">
+        <label for="end_at">Fim</label>
+        <input name="start_at" onchange="formatDate(this);" value="{{inspection.end_at}}" class="auto-kal form-control" required></input>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" name="submit">Salvar</button><br>
+      <a  class="btn btn-secondary btn-block" href="/inspecao" name="cancel">Cancelar</a>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

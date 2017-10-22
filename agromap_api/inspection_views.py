@@ -1,5 +1,5 @@
 """
-Views da API rest
+Views da API rest (app mobile)
 """
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
@@ -64,9 +64,7 @@ def update(request):
 def delete(request):
     if request.method == 'POST':
         __data = json.loads(request.POST['inspection'])
-        __inspection = Inspection.get_by_id_obj(__data['id'])
-        if(__inspection != None):
-            __inspection.delete()
+        if(Inspection.delete(__data['id'])):
             return JsonResponse(True, status=200, safe=False)
         return JsonResponse({"Error":"Inspection not found"}, status=405, safe=False)
     else:

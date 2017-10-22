@@ -20,7 +20,6 @@ class Inspection(models.Model):
         # return '%s' % self.title
         return self.name
 
-
     def get_all():
         __inspections = Inspection.objects.all().order_by('id')
         if(len(__inspections) > 0):
@@ -36,6 +35,12 @@ class Inspection(models.Model):
                 }
                 array.append(__inspection)
             return array
+        return None
+
+    def get_all_obj():
+        __inspections = Inspection.objects.all().order_by('id')
+        if(len(__inspections) > 0):
+            return __inspections
         return None
 
     def get_by_id_json(__id):
@@ -77,4 +82,12 @@ class Inspection(models.Model):
                 }
                 array.append(__inspection)
             return array
+        return False
+
+    def delete(__id):
+        try:
+            Inspection.objects.filter(id=__id).delete()
+            return True
+        except:
+            pass
         return False

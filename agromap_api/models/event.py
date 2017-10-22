@@ -79,3 +79,9 @@ class Event(models.Model):
                 data.append(__event)
             return data
         return None
+
+    def get_by_inspection_obj(__id):
+        __events = Event.objects.filter(inspection=__id).order_by('id')
+        if(len(__events) > 0):
+            return __events
+        return None

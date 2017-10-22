@@ -1,5 +1,5 @@
 """
-Views da API rest
+Views da API rest (app mobile)
 """
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
