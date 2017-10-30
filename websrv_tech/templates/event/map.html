@@ -26,6 +26,7 @@
     <input type="text" hidden="hidden" id="inspection_id" value="{{inspection.id}}">
     <div id="map" style="width: 100%; height: 550px; background: grey" />
     <script  type="text/javascript" charset="UTF-8" >
+    var events = [];
 
       /*
         Functions
@@ -37,24 +38,40 @@
         map.setZoom(zoom);
       }
 
+      function test1(){
+        console.log(e.target.id);
+      }
+
+      // Recupera lista de eventos do server via ajax
       function retrieveEvents(){
         var id = document.getElementById('inspection_id').value;
         var latitude ='';
         var longitude = '';
+        events = [];
         url = "/retrieve-events/" + id;
         $.get( url, function( data ) {
           for(i=0; i< data.length; i++){
+            events.unshift({
+              "index":i,
+              "uuid":data[i].uuid,
+              "description":data[i].description,
+              "kind":data[i].kind,
+              "latitude":data[i].latitude,
+              "longitude":data[i].longitude,
+              "last_edit_at":data[i].last_edit_at
+            });
             latitude = data[i].latitude;
             longitude = data[i].longitude;
-            addMarker(latitude, longitude, data[i].kind);
+            addMarker(latitude, longitude, data[i].kind, i);
           }
           if(latitude != '')
             moveMapToPosition(latitude, longitude, 14);
         });
       }
 
+
       // Função para adicionar marcador
-      function addMarker(latitude, longitude, type){
+      function addMarker(latitude, longitude, type, index){
         var markerElement = document.createElement('div'),
             innerElement = document.createElement('div');
 
@@ -62,6 +79,8 @@
        markerElement.style.borderRadius = '60px 60px ';
        markerElement.style.width = '20px ';
        markerElement.style.height = '20px';
+       markerElement.id = index;
+
        if(type == 'Checked'){
          markerElement.style.backgroundColor = '#0F0';
        }else if (type == 'Observation'){
@@ -72,25 +91,23 @@
          markerElement.style.backgroundColor = '#000';
        }
 
-       function changeOpacity(evt) {
-         evt.target.style.opacity = 0.1;
-       };
-
-       function changeOpacityToOne(evt) {
-         evt.target.style.opacity = 1;
-       };
-
+       // Função para exibir modal com detalhes do eventos
+       function showDetails(e){
+         var index = e.target.id;
+         document.getElementById('kind').value = events[index].kind;
+         document.getElementById('description').value = events[index].description;
+         document.getElementById('last_edit_at').value = events[index].last_edit_at;
+         $('#modalEvent').modal('show');
+       }
 
        var domIcon = new H.map.DomIcon(markerElement, {
 
          onAttach: function(clonedElement, domIcon, domMarker) {
-           clonedElement.addEventListener('click', changeOpacity);
-           clonedElement.addEventListener('mouseout', changeOpacityToOne);
+           clonedElement.addEventListener('click', showDetails);
          },
 
          onDetach: function(clonedElement, domIcon, domMarker) {
-           clonedElement.removeEventListener('click', changeOpacity);
-           clonedElement.removeEventListener('mouseout', changeOpacityToOne);
+           clonedElement.removeEventListener('click', showDetails);
          }
        });
 
@@ -132,5 +149,41 @@
 
   </div>
 </div>
+
+<!--Begin Event Modal-->
+<div class="modal fade" id="modalEvent" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <h3>Detalhes do evento</h3>
+        <br>
+        <form class="form" action="index.html" method="post">
+          <div class="form-group">
+            <label for="kind">Tipo</label>
+            <input class="form-control" type="text" id="kind" value="" disabled>
+          </div>
+          <div class="form-group">
+            <label for="description">Descrição</label>
+            <textarea class="form-control" type="text"  rows="2" id="description" value="" disabled></textarea>
+          </div>
+          <div class="form-group">
+            <label for="last_edit_at">Última alteração</label>
+            <input class="form-control" type="text" id="last_edit_at" value="" disabled>
+          </div>
+        </form>
+        <br>
+      </div>
+      <div class="modal-footer">
+        <button type="button" form="form_login" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--End Event Modal-->
 
 {% endblock %}
