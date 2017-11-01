@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^inspecao/(\d+)/eventos$', inspection_views.events_by_inspection, name='events-by-inspection'),
     url(r'^inspecao/(\d+)/mapa$', inspection_views.inspection_map, name='inspection-map'),
     url(r'^retrieve-events/(\d+)', inspection_views.retrieve_events, name='retrieve_events'),
+    url(r'^evento/(?P<uuid>[\w-]+)/excluir', inspection_views.delete_event, name='delete_event'),
 
     url(r'', views.index, name='index'),
 ]

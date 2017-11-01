@@ -19,3 +19,34 @@ function formatDate(elem, option){
   formatedDate = formatedDate + new_date[0]+ new_date[1];
   document.getElementById(option).value = formatedDate + 'T00:00:00-03';
 }
+
+function showEventModal(id){
+  retrieveEvent(id);
+  // $('#modalEvent').modal('show');
+}
+
+
+// Recupera lista de eventos do server via ajax
+function retrieveEvent(id){
+  url = "/api/get-event-by-id/" + id;
+  myEvent = {
+    "event":{
+      "id":id
+    }
+  }
+  $.post({
+      type: 'post',
+      url: url,
+      data: myEvent,
+      contentType: "application/json; charset=utf-8",
+      success: function (data) {
+          console.log(data);
+      }
+  });
+
+}
+
+function deleteEvent(uuid){
+  window.location = '/evento/' + uuid + '/excluir';
+
+}

@@ -40,7 +40,8 @@
         <th>Ações</th>
       </tr>
       {% for event in events %}
-      <tr onclick="goToEvents({{i.id}});">
+      <!-- <tr onclick="showEventModal({{event.id}});"> -->
+      <tr>
         {% if event.kind == 'Checked' %}
           <td><span class="badge badge-success">Verificado</span></td>
         {% elif event.kind == 'Observation'%}
@@ -52,7 +53,7 @@
         <td>{{event.last_edit_at}}</td>
         {% if event.inspection.supervisor.id == user.id or event.user.id == user.id %}
         <td>
-          <button type="button" class="btn btn-danger" name="button">Excluir</button>
+          <button type="button" class="btn btn-danger" name="button" onclick="deleteEvent('{{event.uuid}}');">Excluir</button>
         </td>
         {% else %}
         <td>
@@ -64,5 +65,40 @@
     </table>
   </div>
 </div>
+<!--Begin Event Modal-->
+<div class="modal fade" id="modalEvent" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <h3>Detalhes do evento</h3>
+        <br>
+        <form class="form" action="index.html" method="post">
+          <div class="form-group">
+            <label for="kind">Tipo</label>
+            <input class="form-control" type="text" id="kind" value="" disabled>
+          </div>
+          <div class="form-group">
+            <label for="description">Descrição</label>
+            <textarea class="form-control" type="text"  rows="2" id="description" value="" disabled></textarea>
+          </div>
+          <div class="form-group">
+            <label for="last_edit_at">Última alteração</label>
+            <input class="form-control" type="text" id="last_edit_at" value="" disabled>
+          </div>
+        </form>
+        <br>
+      </div>
+      <div class="modal-footer">
+        <button type="button" form="form_login" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--End Event Modal-->
 
 {% endblock %}

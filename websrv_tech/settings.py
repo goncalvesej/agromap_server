@@ -164,6 +164,7 @@ STATICFILES_DIRS = (
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
 REST_FRAMEWORK = {
@@ -174,3 +175,10 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.JSONParser',
     )
 }
+
+# Amazon AWS S3 config
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+AWS_ACCESS_KEY_ID = 'AKIAI2LRI27GGOHVLFPA'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'agromapproject'

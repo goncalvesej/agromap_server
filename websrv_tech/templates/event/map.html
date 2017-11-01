@@ -38,9 +38,6 @@
         map.setZoom(zoom);
       }
 
-      function test1(){
-        console.log(e.target.id);
-      }
 
       // Recupera lista de eventos do server via ajax
       function retrieveEvents(){
@@ -50,9 +47,9 @@
         events = [];
         url = "/retrieve-events/" + id;
         $.get( url, function( data ) {
-          for(i=0; i< data.length; i++){
+          for(i=data.length-1; i>=0; i--){
             events.unshift({
-              "index":i,
+              "id":i,
               "uuid":data[i].uuid,
               "description":data[i].description,
               "kind":data[i].kind,
@@ -94,9 +91,17 @@
        // Função para exibir modal com detalhes do eventos
        function showDetails(e){
          var index = e.target.id;
-         document.getElementById('kind').value = events[index].kind;
+
          document.getElementById('description').value = events[index].description;
          document.getElementById('last_edit_at').value = events[index].last_edit_at;
+         document.getElementById('img_event').src = "https://s3.us-east-2.amazonaws.com/agromapproject/" + events[index].uuid + ".png";
+         if(events[index].kind == 'Checked'){
+           document.getElementById('kind').value = 'Verificado';
+         }else if(events[index].kind == 'Observation'){
+           document.getElementById('kind').value = 'Observação';
+         }else{
+           document.getElementById('kind').value = 'Problema';
+         }
          $('#modalEvent').modal('show');
        }
 
@@ -140,6 +145,7 @@
       var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 
       var ui = H.ui.UI.createDefault(map, defaultLayers);
+
       moveMapToPosition(-12.7229533, -47.1325016, 4);
       /*
         End Map
@@ -162,20 +168,27 @@
       <div class="modal-body text-center">
         <h3>Detalhes do evento</h3>
         <br>
-        <form class="form" action="index.html" method="post">
-          <div class="form-group">
-            <label for="kind">Tipo</label>
-            <input class="form-control" type="text" id="kind" value="" disabled>
+        <div class="row">
+          <div class="col-md-6">
+            <form class="form" action="index.html" method="post">
+              <div class="form-group">
+                <label for="kind">Tipo</label>
+                <input class="form-control" type="text" id="kind" value="" disabled>
+              </div>
+              <div class="form-group">
+                <label for="description">Descrição</label>
+                <textarea class="form-control" type="text"  rows="2" id="description" value="" disabled></textarea>
+              </div>
+              <div class="form-group">
+                <label for="last_edit_at">Última alteração</label>
+                <input class="form-control" type="text" id="last_edit_at" value="" disabled>
+              </div>
+            </form>
           </div>
-          <div class="form-group">
-            <label for="description">Descrição</label>
-            <textarea class="form-control" type="text"  rows="2" id="description" value="" disabled></textarea>
+          <div class="col-md-6">
+            <img id="img_event" src="" alt="Imagem do evento" width="200">
           </div>
-          <div class="form-group">
-            <label for="last_edit_at">Última alteração</label>
-            <input class="form-control" type="text" id="last_edit_at" value="" disabled>
-          </div>
-        </form>
+        </div>
         <br>
       </div>
       <div class="modal-footer">

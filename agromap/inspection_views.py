@@ -2,6 +2,7 @@
 Views de inspeções e eventos do app web (browser)
 """
 from django.shortcuts import render
+from django.conf import settings
 from django.http import Http404, HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
@@ -10,6 +11,7 @@ from .decorators import *
 from agromap_api.models.inspection import Inspection
 from agromap_api.models.event import Event
 from agromap_api.serializers import InspectionSerializer
+import boto3
 
 
 ################################################################################
@@ -174,6 +176,48 @@ def events_by_inspection(request, id):
 @csrf_exempt
 @login_required
 @get_request
+def delete_event(request, uuid):
+    __logged_user = UserSession.GetSessionData(request)
+    __event = Event.get_by_id_obj(uuid)
+    __msg_text = "Evento não encontrado!"
+    __msg_type = "warning"
+    if(__event == None):
+        __inspections = Inspection.get_all_obj()
+        return render(request, 'inspection/list.html',
+        {
+            'title': 'Lista de Inspeções',
+            'user':__logged_user,
+            'inspections':__inspections,
+            'msg_text':__msg_text,
+            'msg_type':__msg_type
+        })
+    __inspection = __event.inspection
+    __msg_text = "Você precisa ser o administrador da inspeção para excluir"
+    __msg_type = "warning"
+    if(__logged_user.id == __event.inspection.supervisor.id):
+        try:
+            delete_photo(__event.uuid)
+            __event.delete()
+            __msg_text = "Excluído com sucesso!"
+            __msg_type = "success"
+        except:
+            __msg_text = "Erro ao excluir!"
+            __msg_type = "danger"
+
+    __events = Event.get_by_inspection_obj(__inspection.id)
+    return render(request, 'event/events.html',
+    {
+        'title': 'Eventos',
+        'user':__logged_user,
+        'inspection':__inspection,
+        'events':__events,
+        'msg_text':__msg_text,
+        'msg_type':__msg_type
+    })
+
+@csrf_exempt
+@login_required
+@get_request
 def retrieve_events(request, id):
     try:
         data = Event.get_by_inspection(id)
@@ -182,3 +226,45 @@ def retrieve_events(request, id):
         return JsonResponse(True, status=200, safe=False)
     except Exception as e:
         return JsonResponse({"Error":"Agromap: Bad request"}, status=400, safe=False)
+
+# Exclui foto do S3 de um determinado evento
+def delete_photo(__uuid):
+    try:
+        __s3_client = boto3.client(
+            's3',
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        )
+        response = __s3_client.delete_object(
+            Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+            Key= __uuid + '.png'
+        )
+        return True
+    except Exception as e:
+        print(e)
+    return False
+
+# Exclui todas fotos dos eventos de uma inspeção
+def delete_all_photos(__id):
+    try:
+        __s3_client = boto3.client(
+            's3',
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        )
+        __events = Event.get_by_inspection(__id)
+        for ev in __events:
+            __objects.append({'Key':ev.uuid})
+        print(__objects)
+        response = client.delete_objects(
+            Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+            Delete={
+                'Objects': __objects,
+                'Quiet': True
+            }
+        )
+        print(response.HTTPStatusCode)
+        return True
+    except Exception as e:
+        print(e)
+    return False
