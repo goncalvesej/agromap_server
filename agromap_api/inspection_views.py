@@ -64,7 +64,9 @@ def update(request):
 def delete(request):
     if request.method == 'POST':
         __data = json.loads(request.POST['inspection'])
-        if(Inspection.delete(__data['id'])):
+        __id = __data['id']
+        delete_inspection_folder(__id)
+        if(Inspection.delete(__id)):
             return JsonResponse(True, status=200, safe=False)
         return JsonResponse({"Error":"Inspection not found"}, status=405, safe=False)
     else:
@@ -243,3 +245,46 @@ def get_uuid(request):
         return JsonResponse({"UUID":new_uuid}, status=201, safe=False)
     except:
         pass
+
+
+
+##
+##
+##
+
+
+# Exclui o diretório de fotos de uma inspeção
+def delete_inspection_folder(__id):
+    try:
+        __s3_client = boto3.client(
+            's3',
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        )
+        __objects = __s3_client.list_objects(
+            Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+            Prefix=__id + '/'
+        )
+        for obj in __objects['Contents']:
+            delete_photo(obj['Key'])
+        return True
+    except Exception as e:
+        print(e)
+    return False
+
+# Exclui foto do S3 de um determinado evento
+def delete_photo(__key):
+    try:
+        __s3_client = boto3.client(
+            's3',
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        )
+        response = __s3_client.delete_object(
+            Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+            Key= __key
+        )
+        return True
+    except Exception as e:
+        print(e)
+    return False

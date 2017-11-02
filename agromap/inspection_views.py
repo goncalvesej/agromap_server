@@ -122,6 +122,7 @@ def delete_inspection(request, id):
         if(__logged_user.id == __inspection.supervisor.id):
             try:
                 if(Inspection.delete(id)):
+                    delete_inspection_folder(id)
                     __msg_text = 'Excluído com sucesso!'
                     __msg_type =  'success'
             except:
@@ -196,7 +197,7 @@ def delete_event(request, uuid):
     __msg_type = "warning"
     if(__logged_user.id == __event.inspection.supervisor.id):
         try:
-            delete_photo(__event.uuid)
+            delete_photo(__event.inspection.id + '/' + __event.uuid + '.png')
             __event.delete()
             __msg_text = "Excluído com sucesso!"
             __msg_type = "success"
@@ -228,7 +229,7 @@ def retrieve_events(request, id):
         return JsonResponse({"Error":"Agromap: Bad request"}, status=400, safe=False)
 
 # Exclui foto do S3 de um determinado evento
-def delete_photo(__uuid):
+def delete_photo(__key):
     try:
         __s3_client = boto3.client(
             's3',
@@ -237,33 +238,27 @@ def delete_photo(__uuid):
         )
         response = __s3_client.delete_object(
             Bucket=settings.AWS_STORAGE_BUCKET_NAME,
-            Key= __uuid + '.png'
+            Key= __key
         )
         return True
     except Exception as e:
         print(e)
     return False
 
-# Exclui todas fotos dos eventos de uma inspeção
-def delete_all_photos(__id):
+# Exclui o diretório de fotos de uma inspeção
+def delete_inspection_folder(__id):
     try:
         __s3_client = boto3.client(
             's3',
             aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
         )
-        __events = Event.get_by_inspection(__id)
-        for ev in __events:
-            __objects.append({'Key':ev.uuid})
-        print(__objects)
-        response = client.delete_objects(
+        __objects = __s3_client.list_objects(
             Bucket=settings.AWS_STORAGE_BUCKET_NAME,
-            Delete={
-                'Objects': __objects,
-                'Quiet': True
-            }
+            Prefix=__id + '/'
         )
-        print(response.HTTPStatusCode)
+        for obj in __objects['Contents']:
+            delete_photo(obj['Key'])
         return True
     except Exception as e:
         print(e)
