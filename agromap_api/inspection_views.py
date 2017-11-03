@@ -16,6 +16,7 @@ from agromap_api.models.event import Event
 from agromap_api.models.device import Device
 from agromap_api.serializers import InspectionSerializer
 from agromap_api.serializers import EventSerializer
+import boto3
 
 # View para index
 @csrf_exempt
