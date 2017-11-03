@@ -2,6 +2,7 @@
 Views da API rest (app mobile)
 """
 from django.http import HttpResponse, JsonResponse
+from django.conf import settings
 from django.core import serializers
 from django.shortcuts import render
 from django.utils.six import BytesIO
