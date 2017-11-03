@@ -67,9 +67,8 @@ def delete(request):
     if request.method == 'POST':
         __data = json.loads(request.POST['inspection'])
         __id = __data['id']
-        delete_inspection_folder(__id)
         if(Inspection.delete(__id)):
-            delete_inspection_folder(id)
+            delete_inspection_folder(str(__id))
             return JsonResponse(True, status=200, safe=False)
         return JsonResponse({"Error":"Inspection not found"}, status=405, safe=False)
     else:
