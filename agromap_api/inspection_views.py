@@ -67,6 +67,7 @@ def delete(request):
         __id = __data['id']
         delete_inspection_folder(__id)
         if(Inspection.delete(__id)):
+            delete_inspection_folder(id)
             return JsonResponse(True, status=200, safe=False)
         return JsonResponse({"Error":"Inspection not found"}, status=405, safe=False)
     else:
