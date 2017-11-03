@@ -254,6 +254,23 @@ def get_uuid(request):
 ##
 
 
+# Exclui foto do S3 de um determinado evento
+def delete_photo(__key):
+    try:
+        __s3_client = boto3.client(
+            's3',
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        )
+        response = __s3_client.delete_object(
+            Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+            Key= __key
+        )
+        return True
+    except Exception as e:
+        print(e)
+    return False
+
 # Exclui o diretório de fotos de uma inspeção
 def delete_inspection_folder(__id):
     try:
@@ -268,23 +285,6 @@ def delete_inspection_folder(__id):
         )
         for obj in __objects['Contents']:
             delete_photo(obj['Key'])
-        return True
-    except Exception as e:
-        print(e)
-    return False
-
-# Exclui foto do S3 de um determinado evento
-def delete_photo(__key):
-    try:
-        __s3_client = boto3.client(
-            's3',
-            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-        )
-        response = __s3_client.delete_object(
-            Bucket=settings.AWS_STORAGE_BUCKET_NAME,
-            Key= __key
-        )
         return True
     except Exception as e:
         print(e)
