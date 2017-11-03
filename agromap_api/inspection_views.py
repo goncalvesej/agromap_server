@@ -96,7 +96,12 @@ def get_all(request, id=None):
         try:
             data = Inspection.get_all()
             if(data != None):
-                return JsonResponse(data, status=200, safe=False)
+                inspections = []
+                for i in data:
+                    date = datetime.datetime.strptime(i['end_at'], "%Y-%m-%d %H:%M:%S")
+                    if date >= datetime.datetime.now():
+                        inspections.append(i)
+                return JsonResponse(inspections, status=200, safe=False)
             return JsonResponse(True, status=200, safe=False)
         except Exception as e:
             print(e)

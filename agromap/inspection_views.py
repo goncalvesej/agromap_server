@@ -75,6 +75,7 @@ def edit_inspection(request, id):
 # View para criar uma nova inspeção
 @csrf_exempt
 @login_required
+@admin_required
 @valid_request
 def create_inspection(request):
     __logged_user = UserSession.GetSessionData(request)
@@ -87,6 +88,14 @@ def create_inspection(request):
         })
     else:
         __data = request.POST
+        if(__data['start_at'] > __data['end_at']):
+            return render(request, 'inspection/create.html',
+            {
+                'title': 'Inspeções',
+                'msg_text':'Data de início deve ser anterior a data de término!',
+                'msg_type':'warning',
+                'user':__logged_user,
+            })
         __serializer = InspectionSerializer(data=__data)
         if(__serializer.is_valid()):
             __serializer.save()
