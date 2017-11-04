@@ -61,12 +61,12 @@
               "longitude":data[i].longitude,
               "last_edit_at":data[i].last_edit_at
             });
-            if(latitude == ''){
-              latitude = data[i].latitude;
-              longitude = data[i].longitude;
-            }
+            latitude = data[i].latitude;
+            longitude = data[i].longitude;
             addMarker(latitude, longitude, data[i].kind, i);
           }
+          latitude = events[0]['latitude'];
+          longitude = events[0]['longitude'];
           document.getElementById('map').style.opacity = '1';
           document.getElementById('loading').setAttribute('hidden','hidden');
           if(latitude != '')

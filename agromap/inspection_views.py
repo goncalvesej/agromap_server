@@ -12,6 +12,7 @@ from agromap_api.models.inspection import Inspection
 from agromap_api.models.event import Event
 from agromap_api.serializers import InspectionSerializer
 import boto3
+import datetime
 
 
 ################################################################################
@@ -30,47 +31,6 @@ def list_inspection(request):
         'inspections':inspections,
     })
 
-@csrf_exempt
-@login_required
-@valid_request
-def edit_inspection(request, id):
-    __logged_user = UserSession.GetSessionData(request)
-    if(request.method == 'GET'):
-        __inspection = Inspection.get_by_id_obj(id)
-        if(__inspection!=None):
-            return render(request, 'inspection/edit.html',
-            {
-                'title': 'Editar inspeção',
-                'user':__logged_user,
-                'inspection':__inspection
-            })
-        inspections = Inspection.get_all_obj()
-        return render(request, 'inspection/list.html',
-        {
-            'title': 'Inspeções',
-            'msg_text':'Inspeção não encontrada!',
-            'msg_type':'warning',
-            'user':__logged_user,
-            'inspections':inspections,
-        })
-    else:
-        __data = request.POST
-        __serializer = InspectionSerializer(data=__data)
-        if(__serializer.is_valid()):
-            __serializer.save()
-            __msg_text = "Inspeção criada com sucesso!"
-            __msg_type = "success"
-        else:
-            __msg_text = "Erro ao criar inspeção!"
-            __msg_type = "danger"
-    return render(request, 'inspection/list.html',
-    {
-        'title': 'Inspeções',
-        'msg_text':__msg_text,
-        'msg_type':__msg_type,
-        'user':__logged_user,
-        'inspections':inspections,
-    })
 
 # View para criar uma nova inspeção
 @csrf_exempt
@@ -98,6 +58,7 @@ def create_inspection(request):
             })
         __serializer = InspectionSerializer(data=__data)
         if(__serializer.is_valid()):
+            print(__data)
             __serializer.save()
             __inspections = Inspection.get_all_obj()
             return render(request, 'inspection/list.html',
@@ -149,6 +110,81 @@ def delete_inspection(request, id):
         'user':__logged_user,
         'inspections':__inspections,
     })
+
+@csrf_exempt
+@login_required
+@valid_request
+def edit_inspection(request, id):
+    __logged_user = UserSession.GetSessionData(request)
+    if(request.method == 'GET'):
+        __inspection = Inspection.get_by_id_obj(id)
+        if(__inspection!=None):
+            # Start date
+            day = '%02d' % (__inspection.start_at.day)
+            month = '%02d' % (__inspection.start_at.month)
+            year = str(__inspection.start_at.year)
+
+            dateStart = day + '/' + month + '/' + year
+            dateStart_formated = year + '-' + month + '-' + day + 'T00:00:00-03'
+
+            # End date
+            day = '%02d' % (__inspection.end_at.day)
+            month = '%02d' % (__inspection.end_at.month)
+            year = str(__inspection.end_at.year)
+
+            dateEnd = day + '/' + month + '/' + year
+            dateEnd_formated = year + '-' + month + '-' + day + 'T00:00:00-03'
+
+            return render(request, 'inspection/edit.html',
+            {
+                'title': 'Editar inspeção',
+                'user':__logged_user,
+                'inspection':__inspection,
+                'dateStart':dateStart,
+                'dateStart_formated':dateStart_formated,
+                'dateEnd':dateEnd,
+                'dateEnd_formated':dateEnd_formated
+            })
+        inspections = Inspection.get_all_obj()
+        return render(request, 'inspection/list.html',
+        {
+            'title': 'Inspeções',
+            'msg_text':'Inspeção não encontrada!',
+            'msg_type':'warning',
+            'user':__logged_user,
+            'inspections':inspections,
+        })
+    else:
+        __data = request.POST
+        __inspection = Inspection.get_by_id_obj(__data['id'])
+        if(__inspection == None):
+            __msg_text = 'Inspeção não encontrada!'
+            __msg_type = 'warning'
+        else:
+            print(__data['start_at'])
+            print(__data['end_at'])
+            __inspection.name = __data['name']
+            __inspection.start_at = __data['start_at']
+            __inspection.end_at = __data['end_at']
+            __serializer = InspectionSerializer(__inspection, data=__data)
+            if(__serializer.is_valid()):
+                __serializer.save()
+                __msg_text = "Inspeção alterada com sucesso!"
+                __msg_type = "success"
+            else:
+                __msg_text = "Erro ao criar inspeção. Verifique os campos!"
+                __msg_type = "danger"
+                print(__serializer.errors)
+
+        inspections = Inspection.get_all_obj()
+        return render(request, 'inspection/list.html',
+        {
+            'title': 'Inspeções',
+            'msg_text':__msg_text,
+            'msg_type':__msg_type,
+            'user':__logged_user,
+            'inspections':inspections,
+        })
 
 # View para exibir mapa com os eventos
 @csrf_exempt
@@ -251,7 +287,7 @@ def delete_photo(__key):
         )
         return True
     except Exception as e:
-        print(e)
+        pass
     return False
 
 # Exclui o diretório de fotos de uma inspeção
@@ -270,5 +306,5 @@ def delete_inspection_folder(__id):
             delete_photo(obj['Key'])
         return True
     except Exception as e:
-        print(e)
+        pass
     return False
