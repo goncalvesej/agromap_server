@@ -242,11 +242,12 @@ def delete_event(request, uuid):
     __msg_type = "warning"
     if(__logged_user.id == __event.inspection.supervisor.id):
         try:
-            delete_photo(__event.inspection.id + '/' + __event.uuid + '.png')
+            delete_photo(str(__event.inspection.id) + '/' + __event.uuid + '.png')
             __event.delete()
             __msg_text = "Excluído com sucesso!"
             __msg_type = "success"
-        except:
+        except Exception as e:
+            print(e)
             __msg_text = "Erro ao excluir!"
             __msg_type = "danger"
 
