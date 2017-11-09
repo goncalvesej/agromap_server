@@ -230,3 +230,7 @@ function changeUserLevel(userID, userName, userLevel){
 function performChangeUserLevel(){
   window.location = '/usuario/' + user_id +'/altera-nivel';
 }
+
+function goToMap(id){
+  window.location = '/inspecao/' + id +'/mapa';
+}

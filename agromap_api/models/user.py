@@ -100,7 +100,7 @@ class User(models.Model):
             return user
 
     def get_all():
-        return User.objects.all()
+        return User.objects.all().order_by('id')
 
     def delete(__id):
         try:
@@ -145,6 +145,19 @@ class User(models.Model):
                 __user.level = 0
                 __user.save()
                 return True
+        except Exception as e:
+            print(e)
+            return False
+
+    def updateData(__data, __id):
+        try:
+            __user = User.objects.filter(id=__id)
+            __user = __user[0]
+            __user.name = __data['name']
+            __user.last_name = __data['last_name']
+            __user.email = __data['email']
+            __user.save()
+            return True
         except Exception as e:
             print(e)
             return False

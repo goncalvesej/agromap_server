@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^cadastro$', user_views.signup, name='signup'),
     url(r'^logout$', user_views.logout, name='logout'),
     url(r'^cadastro$', user_views.signup, name='signup'),
+    url(r'^atualiza-cadastro$', user_views.update_data, name='update'),
     url(r'^meus-dados$', user_views.my_data, name='my_data'),
     url(r'^alterar-senha$', user_views.change_password, name='change-password'),
     url(r'^gerenciar-usuarios$', user_views.list_users, name='list-users'),

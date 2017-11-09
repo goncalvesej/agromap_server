@@ -200,6 +200,32 @@ def delete_user(request, id):
     })
 
 @login_required
+def update_data(request):
+    __logged_user = UserSession.GetSessionData(request)
+    __data = request.POST
+    if(User.updateData(__data, __logged_user.id)):
+        __text = "Alterado com sucesso!"
+        __type = "success"
+        __logged_user = User.get_by_id(__logged_user.id)
+        __user_json = {
+            'id':__logged_user.id,
+            'name':__logged_user.name,
+            'email':__logged_user.email,
+            'level':__logged_user.level
+        }
+        UserSession.SaveSession(request, __user_json)
+    else:
+        __text = 'Erro ao alterar dados!'
+        __type = 'danger'
+    return render(request, 'user/my-data.html',
+    {
+    "title":"Meus dados",
+    "msg_text":__text,
+    "msg_type":__type,
+    'user':__logged_user
+    })
+
+@login_required
 @admin_required
 def change_level(request, id):
     __logged_user = UserSession.GetSessionData(request)

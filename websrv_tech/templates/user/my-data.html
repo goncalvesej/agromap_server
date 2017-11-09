@@ -10,25 +10,26 @@
 <div class="row justify-content-center">
   <div class="col-md-6">
 
-    <form action="/cadastro" class="form" method="POST" id="form_user">
+    <form action="/atualiza-cadastro" class="form" method="POST" id="form_user">
       {% csrf_token %}
+
       <div class="form-group">
         <label for="name">Nome</label>
-        <input class="form-control" type="text" name="name" value="{{user.name}}">
+        <input class="form-control" type="text" name="name" value="{{user.name}}" maxlength="20">
       </div>
       <div class="form-group">
-        <label for="name">Sobrenome</label>
-        <input class="form-control" type="text" name="name" value="{{user.last_name}}">
+        <label for="last_name">Sobrenome</label>
+        <input class="form-control" type="text" name="last_name" value="{{user.last_name}}" maxlength="60">
       </div>
       <div class="form-group">
-        <label for="name">Email</label>
-        <input class="form-control" type="text" name="name" value="{{user.email}}">
+        <label for="email">Email</label>
+        <input class="form-control" type="email" name="email" value="{{user.email}}" maxlength="60">
       </div>
       <div class="form-group text-center">
         <a href="#" data-toggle="modal" data-target="#modalPass" type="submit">Clique aqui para alterar sua senha</a>
       </div>
       <br>
-      <p><button type="submit" name="button" class="btn btn-primary btn-block" >Salvar</button></p>
+      <p><button type="submit" name="button" class="btn btn-primary btn-block">Salvar</button></p>
       <button name="button" href="/" class="btn btn-secondary btn-block" >Cancelar</button>
     </form>
 
@@ -48,16 +49,16 @@
               {% csrf_token %}
               <div class="form-group">
                 <label for="old_password">Senha atual</label>
-                <input class="form-control" type="password" name="old_password" value="">
+                <input class="form-control" type="password" name="old_password" value="" maxlength="20">
               </div>
               <div class="form-group">
                 <label for="new_password">Nova senha</label>
-                <input class="form-control" type="password" name="new_password" value="">
+                <input class="form-control" type="password" name="new_password" value="" maxlength="20">
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button type="submit" form="form_password" class="btn btn-success">Alterar</button>
+            <button type="submit" form="form_password" class="btn btn-success" onclick="disableMe(this);">Alterar</button>
             <button type="button" form="form_password" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
           </div>
         </div>

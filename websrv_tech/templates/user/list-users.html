@@ -29,9 +29,9 @@
             <td>Padrão</td>
           {% endif %}
           {% if u.active == 'false' %}
-            <td><a href="/altera-status/{{u.id}}" class="btn btn-sm btn-info">Ativar</a></td>
+            <td><a href="/altera-status/{{u.id}}" class="btn btn-sm btn-outline-info">Ativar</a></td>
           {% else %}
-            <td><a href="/altera-status/{{u.id}}" class="btn btn-sm btn-danger">Desativar</a></td>
+            <td><a href="/altera-status/{{u.id}}" class="btn btn-sm btn-outline-danger">Desativar</a></td>
           {% endif %}
           <td>
             <button class="btn btn-sm btn-success" onclick="changeUserLevel({{u.id}}, '{{u.name}}', '{{u.level}}');">Alterar nível</button>
@@ -66,7 +66,7 @@
           <span id="content_user_level"></span>
           <br>
           <br>
-          <button href="#" class="btn btn-dark btn-block" onclick="performChangeUserLevel();">Alterar</button>
+          <button href="#" class="btn btn-dark btn-block" onclick="performChangeUserLevel(); disableMe(this);">Alterar</button>
         </div>
         <br>
       </div>
