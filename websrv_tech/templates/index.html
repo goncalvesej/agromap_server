@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-
 {% block content %}
 
 <div class="row text-center center-block">
@@ -8,5 +7,33 @@
     <img class="text-center center-block img-fluid" style="margin-top:20px; width: 500px;" src="{% static 'img/logo-full-500x500.png'%}">
   </div>
 </div>
-
+<!--Begin Modal Login-->
+<div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <h3>Seja Bem Vindo!</h3>
+        <img class="text-center center-block img-fluid" style="width: 200px;" src="{% static 'img/logo-full-500x500.png'%}">
+        <br>
+        <form action="/login" id="form_login" class="form-vertical" method="post">
+          {% csrf_token %}
+          {{ form_login }}
+        </form>
+        <br>
+        <a href="/cadastro">Novo cadastro</a><br>
+        <a href="/recuperar-senha">Esqueceu sua senha?</a>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" form="form_login" class="btn btn-primary">Entrar</button>
+        <button type="button" form="form_login" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--End Modal Login-->
 {% endblock %}

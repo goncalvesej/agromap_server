@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-
 {% block content %}
 
 <div class="row text-center justify-content center">
@@ -17,9 +16,9 @@
 <br>
 <div class="row center-block">
   <div class="col-md-12">
-
     <table class="table table-hover">
       <tr>
+        <th>Visualizar</th>
         <th>Nome</th>
         <th>Criado em</th>
         <th>Início</th>
@@ -27,15 +26,20 @@
         <th>Ações</th>
       </tr>
       {% for i in inspections %}
-      <tr onclick="goToEvents({{i.id}});">
+      <tr>
+        <td>
+          <button type="button" class="btn btn-info"  onclick="goToEvents({{i.id}}); disableMe(this);">
+            <img class="text-center center-block img-fluid" style="width: 15px; margin: 0px; padding: 0px;" src="{% static 'img/searching-magnifying-glass.png'%}">
+          </button>
+        </td>
         <td>{{i.name}}</td>
         <td>{{i.created_at}}</td>
         <td>{{i.start_at}}</td>
         <td>{{i.end_at}}</td>
         {% if i.supervisor.id == user.id %}
         <td>
-          <a type="button" href="/inspecao/{{i.id}}/editar" class="btn btn-warning" name="button">Editar</a> |
-          <a type="button" href="/inspecao/{{i.id}}/excluir" class="btn btn-danger" name="button">Excluir</a>
+          <a type="button" href="/inspecao/{{i.id}}/editar" onclick="disableMe(this);" class="btn btn-warning" name="button">Editar</a> |
+          <a type="button" href="/inspecao/{{i.id}}/excluir" onclick="disableMe(this);" class="btn btn-danger" name="button">Excluir</a>
         </td>
         {% else %}
         <td>

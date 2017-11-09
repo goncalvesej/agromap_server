@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-
 {% block content %}
 
 <div class="row text-center center-block">
@@ -8,28 +7,30 @@
       <h1>{{title}}</h1>
   </div>
 </div>
-
 <div class="row text-center center-block justify-content-center">
   <div class="col-md-6">
-    <form class="form" action="/inspecao/criar" method="post">
+    <form class="form" id="form-inspection" action="/inspecao/criar" method="post">
       <div class="form-group">
         <label for="name">Nome</label>
-        <input class="form-control" type="text" name="name" value="" required>
+        <input class="form-control" type="text" name="name" id="name" value="" maxlength="40" required>
       </div>
       <div class="form-group">
-        <label for="start_at">Início</label>
-        <input onchange="formatDate(this, 'start_at');" class="auto-kal form-control" required></input>
-        <input type="text" name="start_at" hidden="hidden" id="start_at" value="">
+        <label for="input_start">Data de início</label>
+        <input maxlength="10" onchange="formatDate(event, this, 'start_at');" onkeyup="formatDate(event, this, 'start_at');" id="input_start" class="form-control" required  placeholder="DD/MM/AAAA"></input>
+        <input id="start_at" name="start_at" hidden="hidden"></input>
       </div>
       <div class="form-group">
-        <label for="end_at">Fim</label>
-        <input onchange="formatDate(this, 'end_at');" class="auto-kal form-control" required></input>
-        <input type="text" name="end_at" hidden="hidden" id="end_at" value="">
+        <label for="input_end">Data de término</label>
+        <input maxlength="10" onchange="formatDate(event, this, 'end_at');" onkeyup="formatDate(event, this, 'end_at');" id="input_end" class="form-control" required  placeholder="DD/MM/AAAA"></input>
+        <input id="end_at" name="end_at" hidden="hidden"></input>
       </div>
       <input type="text" hidden="hidden" name="supervisor" value="{{user.id}}">
-      <button type="submit" class="btn btn-primary btn-block" name="submit">Criar</button><br>
-      <a type="button" class="btn btn-secondary btn-block" href="/inspecao" name="cancel">Cancelar</a>
-    </form>
+      </form>
+      <button onclick="submitForm();" id="btn-submit" class="btn btn-primary btn-block" style="cursor: pointer;">
+        Salvar
+      </button>
+      <br>
+      <a class="btn btn-secondary btn-block" href="/inspecao" name="cancel">Cancelar</a>
   </div>
 </div>
 {% endblock %}

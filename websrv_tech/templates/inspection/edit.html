@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-
 {% block content %}
 
 <div class="row text-center center-block">
@@ -11,26 +10,26 @@
 
 <div class="row text-center justify-content-center">
   <div class="col-md-6">
-    <form class="form" action="/inspecao/{{inspection.id}}/editar" method="post">
+    <form class="form" id="form-inspection" action="/inspecao/{{inspection.id}}/editar" method="post">
       {% csrf_token %}
       <input type="text" hidden="hidden" name="id" value="{{inspection.id}}">
       <div class="form-group">
         <label for="name">Name</label>
-        <input class="form-control" type="text" name="name" value="{{inspection.name}}">
+        <input class="form-control" type="text" id="name" name="name" value="{{inspection.name}}">
       </div>
       <div class="form-group">
         <label for="start_at">Início</label>
-        <input onchange="formatDate(this, 'start_at');" class="auto-kal form-control" required value="{{dateStart}}"></input>
-        <input type="text" name="start_at" hidden="hidden" id="start_at" value="{{dateStart_formated}}">
+        <input maxlength="10" onchange="formatDate(event, this, 'start_at');" onkeyup="formatDate(event, this, 'start_at');" id="input_start" class="form-control" required  placeholder="DD/MM/AAAA" value="{{dateStart}}"></input>
+        <input id="start_at" name="start_at" hidden="hidden" value="{{dateStart_formated}}"></input>
       </div>
       <div class="form-group">
         <label for="end_at">Fim</label>
-        <input onchange="formatDate(this, 'end_at');" class="auto-kal form-control" required value="{{dateEnd}}"></input>
-        <input type="text" name="end_at" hidden="hidden" id="end_at" value="{{dateEnd_formated}}">
+        <input maxlength="10" onchange="formatDate(event, this, 'end_at');" onkeyup="formatDate(event, this, 'end_at');" id="input_end" class="form-control" required  placeholder="DD/MM/AAAA" value="{{dateEnd}}"></input>
+        <input id="end_at" name="end_at" hidden="hidden" value="{{dateEnd_formated}}"></input>
       </div>
-      <button type="submit" class="btn btn-primary btn-block" name="submit">Salvar</button><br>
-      <a  class="btn btn-secondary btn-block" href="/inspecao" name="cancel">Cancelar</a>
     </form>
+    <button onclick="submitForm();" id="btn-submit" class="btn btn-primary btn-block" style="cursor: pointer;">Criar</button><br>
+    <a  class="btn btn-secondary btn-block" href="/inspecao" name="cancel">Cancelar</a>
   </div>
 </div>
 

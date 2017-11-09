@@ -157,6 +157,28 @@ def list_users(request):
 
 @login_required
 @admin_required
+@get_request
+def change_status(request, id):
+    __logged_user = UserSession.GetSessionData(request)
+    if User.changeActive(id):
+        users = User.get_all()
+        __text = 'Alterado com sucesso!'
+        __type = 'success'
+    else:
+        __text = 'Erro!'
+        __type = 'danger'
+    users = User.get_all()
+    return render(request, 'user/list-users.html',
+    {
+        'title': 'Gerenciar usuários',
+        'user':__logged_user,
+        'users': users,
+        'msg_text':__text,
+        'msg_type':__type
+    })
+
+@login_required
+@admin_required
 def delete_user(request, id):
     __logged_user = UserSession.GetSessionData(request)
     __text = ""
@@ -166,6 +188,29 @@ def delete_user(request, id):
         __type = "success"
     else:
         __text = "Erro ao excluir!"
+        __type = "danger"
+    users = User.get_all()
+    return render(request, 'user/list-users.html',
+    {
+        'title': 'Gerenciar usuários',
+        'msg_type': __type,
+        'msg_text': __text,
+        'user':__logged_user,
+        'users': users
+    })
+
+@login_required
+@admin_required
+def change_level(request, id):
+    __logged_user = UserSession.GetSessionData(request)
+    __text = ""
+    __type = ""
+
+    if(User.changeLevel(id)):
+        __text = "Alterado com sucesso!"
+        __type = "success"
+    else:
+        __text = "Erro!"
         __type = "danger"
     users = User.get_all()
     return render(request, 'user/list-users.html',

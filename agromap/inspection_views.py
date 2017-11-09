@@ -31,6 +31,13 @@ def list_inspection(request):
         'inspections':inspections,
     })
 
+def teste(request):
+    return render(request, 'home.html',
+    {
+        'title': 'Inspeções',
+
+    })
+
 
 # View para criar uma nova inspeção
 @csrf_exempt
@@ -125,7 +132,7 @@ def edit_inspection(request, id):
             year = str(__inspection.start_at.year)
 
             dateStart = day + '/' + month + '/' + year
-            dateStart_formated = year + '-' + month + '-' + day + 'T00:00:00-03'
+            dateStart_formated = year + '-' + month + '-' + day + 'T00:00:00-00'
 
             # End date
             day = '%02d' % (__inspection.end_at.day)
@@ -133,7 +140,7 @@ def edit_inspection(request, id):
             year = str(__inspection.end_at.year)
 
             dateEnd = day + '/' + month + '/' + year
-            dateEnd_formated = year + '-' + month + '-' + day + 'T00:00:00-03'
+            dateEnd_formated = year + '-' + month + '-' + day + 'T23:59:59-00'
 
             return render(request, 'inspection/edit.html',
             {

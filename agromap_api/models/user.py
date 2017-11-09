@@ -9,7 +9,8 @@ class User(models.Model):
     last_name = models.CharField(max_length=60, verbose_name='Sobrenome')
     email = models.EmailField(max_length=60, unique=True, verbose_name='Email')
     password = models.CharField(max_length=255, verbose_name='Senha')
-    level = models.IntegerField(default=2, verbose_name='Nível')
+    level = models.IntegerField(default=2, max_length=20, verbose_name='Nível')
+    active = models.CharField(max_length=10, verbose_name='Ativo', default='false')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
 
     def __str__(self):
@@ -32,6 +33,8 @@ class User(models.Model):
                 pass
         ph = PasswordHasher()
         for u in users:
+            if(u.active == 'false'):
+                return None
             try:
                 ph.verify(u.password, __password)
                 __logged_user = {
@@ -106,3 +109,42 @@ class User(models.Model):
         except:
             pass
         return False
+
+    def changeActive(__id):
+        try:
+            users = User.objects.filter(id=__id)
+            for u in users:
+                if(u.active =='true'):
+                    u.active = 'false'
+                else:
+                    u.active = 'true'
+                u.save()
+                return True
+            return False
+        except Exception as e:
+            print(e)
+            pass
+        return False
+
+    def changeLevel(__id):
+        try:
+            __user = User.objects.filter(id=__id)
+            __user = __user[0]
+            if(__user.level == 0):
+                users = User.objects.all()
+                nAdmin = 0
+                for u in users:
+                    if(u.level == 0):
+                        nAdmin = nAdmin + 1
+                if(nAdmin > 1):
+                    __user.level = 2
+                    __user.save()
+                    return True
+                return False
+            else:
+                __user.level = 0
+                __user.save()
+                return True
+        except Exception as e:
+            print(e)
+            return False

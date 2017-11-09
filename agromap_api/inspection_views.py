@@ -98,8 +98,9 @@ def get_all(request, id=None):
             if(data != None):
                 inspections = []
                 for i in data:
-                    date = datetime.datetime.strptime(i['end_at'], "%Y-%m-%d %H:%M:%S")
-                    if date >= datetime.datetime.now():
+                    dateStart = datetime.datetime.strptime(i['start_at'], "%Y-%m-%d %H:%M:%S")
+                    dateEnd = datetime.datetime.strptime(i['end_at'], "%Y-%m-%d %H:%M:%S")
+                    if dateStart <= datetime.datetime.now() and dateEnd >= datetime.datetime.now():
                         inspections.append(i)
                 return JsonResponse(inspections, status=200, safe=False)
             return JsonResponse(True, status=200, safe=False)

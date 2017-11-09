@@ -6,6 +6,7 @@ from agromap import views, user_views, inspection_views
 urlpatterns = [
     # Usuario
     url(r'^login$', user_views.signin, name='signin'),
+    url(r'^altera-status/(\d+)$', user_views.change_status, name='altera-status'),
     url(r'^cadastro$', user_views.signup, name='signup'),
     url(r'^logout$', user_views.logout, name='logout'),
     url(r'^cadastro$', user_views.signup, name='signup'),
@@ -13,6 +14,7 @@ urlpatterns = [
     url(r'^alterar-senha$', user_views.change_password, name='change-password'),
     url(r'^gerenciar-usuarios$', user_views.list_users, name='list-users'),
     url(r'^usuario/excluir/(\d+)$', user_views.delete_user, name='delete-user'),
+    url(r'^usuario/(\d+)/altera-nivel$', user_views.change_level, name='altera-nivel'),
 
     # Inspeções e eventos
     url(r'^inspecao$', inspection_views.list_inspection, name='list-inspection'),
@@ -25,5 +27,6 @@ urlpatterns = [
     url(r'^retrieve-events/(\d+)', inspection_views.retrieve_events, name='retrieve_events'),
     url(r'^evento/(?P<uuid>[\w-]+)/excluir', inspection_views.delete_event, name='delete_event'),
 
+    url(r'sobre', views.about, name='about'),
     url(r'', views.index, name='index'),
 ]
