@@ -23,7 +23,7 @@ class Event(models.Model):
         null=True
     )
     kind = models.CharField(max_length=40, default='Checked')
-    last_edit_at = models.DateTimeField(auto_now_add=True)
+    last_edit_at = models.DateTimeField()
     latitude = models.CharField(max_length=255)
     longitude = models.CharField(max_length=255)
 
