@@ -30,10 +30,11 @@
 <br>
 
 <div class="row center-block justify-content-center">
-  <div class="col-md-10">
+  <div class="col-md-12">
     <table class="table table-hover">
       <tr>
         <th>Tipo</th>
+        <th>Usuário</th>
         <th>Descrição</th>
         <th>Última alteração</th>
         <th>Ações</th>
@@ -48,6 +49,7 @@
         {% else %}
           <td><span class="badge badge-danger">Problema</span></td>
         {% endif%}
+        <td>{{event.user}}</td>
         <td>{{event.description}}</td>
         <td>{{event.last_edit_at}}</td>
         {% if event.inspection.supervisor.id == user.id or event.user.id == user.id %}
