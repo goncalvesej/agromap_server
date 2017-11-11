@@ -50,7 +50,7 @@
         events = [];
         url = "/retrieve-events/" + id;
         $.get( url, function( data ) {
-          for(i=data.length-1; i>=0; i--){
+          for(i=0; i < data.length; i++){
             events.unshift({
               "id":i,
               "uuid":data[i].uuid,
@@ -62,23 +62,18 @@
             });
             latitude = data[i].latitude;
             longitude = data[i].longitude;
-            addMarker(latitude, longitude, data[i].kind, i);
-          }
-          if(events[0]!=null){
-            latitude = events[0]['latitude'];
-            longitude = events[0]['longitude'];
+            addMarker(data[i], i, id);
           }
           document.getElementById('map').style.opacity = '1';
           document.getElementById('loading').setAttribute('hidden','hidden');
           if(latitude != '')
             moveMapToPosition(latitude, longitude, 14);
-
         });
       }
 
 
       // Função para adicionar marcador
-      function addMarker(latitude, longitude, type, index){
+      function addMarker(mmEvent, mmindex, inspection_id){
         var markerElement = document.createElement('div'),
             innerElement = document.createElement('div');
 
@@ -86,13 +81,13 @@
        markerElement.style.borderRadius = '60px 60px ';
        markerElement.style.width = '20px ';
        markerElement.style.height = '20px';
-       markerElement.id = index;
+       markerElement.id = mmindex;
 
-       if(type == 'Checked'){
+       if(mmEvent.kind == 'Checked'){
          markerElement.style.backgroundColor = '#0F0';
-       }else if (type == 'Observation'){
+       }else if (mmEvent.kind == 'Observation'){
          markerElement.style.backgroundColor = '#00F';
-       }else if (type == 'Problem'){
+       }else if (mmEvent.kind == 'Problem'){
          markerElement.style.backgroundColor = '#F00';
        }else{
          markerElement.style.backgroundColor = '#000';
@@ -100,15 +95,17 @@
 
        // Função para exibir modal com detalhes do eventos
        function showDetails(e){
-         var index = e.target.id;
-         var id = document.getElementById('inspection_id').value;
-         document.getElementById('description').value = events[index].description;
-         document.getElementById('last_edit_at').value = events[index].last_edit_at;
+         // var index = e.target.id;
+         // console.log("Target - Index: " + index);
+
+         document.getElementById('uuid').value = mmEvent.uuid;
+         document.getElementById('description').value = mmEvent.description;
+         document.getElementById('last_edit_at').value = mmEvent.last_edit_at;
          document.getElementById('img_event').src =
-            "https://s3.us-east-2.amazonaws.com/agromapproject/" + id + '/' +  events[index].uuid + ".png";
-         if(events[index].kind == 'Checked'){
+            "https://s3.us-east-2.amazonaws.com/agromapproject/" + inspection_id + '/' +  mmEvent.uuid + ".png";
+         if(mmEvent.kind == 'Checked'){
            document.getElementById('kind').value = 'Verificado';
-         }else if(events[index].kind == 'Observation'){
+         }else if(mmEvent.kind == 'Observation'){
            document.getElementById('kind').value = 'Observação';
          }else{
            document.getElementById('kind').value = 'Problema';
@@ -127,7 +124,7 @@
          }
        });
 
-       var eventMarker = new H.map.DomMarker({lat: latitude, lng: longitude}, {
+       var eventMarker = new H.map.DomMarker({lat: mmEvent.latitude, lng: mmEvent.longitude}, {
          icon: domIcon
        });
 
@@ -183,21 +180,29 @@
           <div class="col-md-6">
             <form class="form" action="index.html" method="post">
               <div class="form-group">
-                <label for="kind">Tipo</label>
-                <input class="form-control" type="text" id="kind" value="" disabled>
+                <label for="kind">Identificador</label>
+                <input class="form-control" type="text" id="uuid" value="">
               </div>
               <div class="form-group">
-                <label for="description">Descrição</label>
-                <textarea class="form-control" type="text"  rows="2" id="description" value="" disabled></textarea>
+                <label for="kind">Tipo</label>
+                <input class="form-control" type="text" id="kind" value="">
               </div>
               <div class="form-group">
                 <label for="last_edit_at">Última alteração</label>
-                <input class="form-control" type="text" id="last_edit_at" value="" disabled>
+                <input class="form-control" type="text" id="last_edit_at" value="">
               </div>
             </form>
           </div>
           <div class="col-md-6">
             <img id="img_event" src="" alt="Imagem do evento" width="200">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="description">Descrição</label>
+              <textarea class="form-control" type="text"  rows="2" id="description" value=""></textarea>
+            </div>
           </div>
         </div>
         <br>
