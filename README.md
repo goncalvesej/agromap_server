@@ -8,4 +8,5 @@
 Este projeto foi proposto pela empresa @Tech, uma startup que desenvolve tecnologias para o agropecuária, localizada em Piracicaba-SP.
 
 Aplicação web desenvolvida com o framework Django, para servir a aplicação móvel do projeto.
+<br>
 <b>App mobile: </b>https://github.com/eraldojr/agromap
