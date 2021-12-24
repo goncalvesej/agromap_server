@@ -1,6 +1,6 @@
 <h1>Projeto desenvolvido para a disciplina de Projeto de Sistemas do IFSP Piracicaba.</h1>
 
-<h2>Aplicação servidora</h2>
+<h2>Web service</h2>
 
 <b>Aluno:</b> Eraldo Gonçalves Junior
 <b>Professor:</b> Dr. Thiago Luis Lopes Siqueira
